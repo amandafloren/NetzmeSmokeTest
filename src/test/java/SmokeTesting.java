@@ -2,9 +2,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -16,22 +14,23 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.NoSuchElementException;
-import java.util.concurrent.TimeUnit;
+
 
 public class SmokeTesting {
 
     public AppiumDriver<MobileElement> driver;
-   // text_introduction_next
+
+    // text_introduction_next
     @BeforeMethod
-    public void setup () throws MalformedURLException {
+    public void setup() throws MalformedURLException {
         DesiredCapabilities caps = new DesiredCapabilities();
         caps.setCapability("deviceName", "Redmi 4");
         caps.setCapability("platformName", "Android");
         caps.setCapability("platformVersion", "6.0.1");//caps.setCapability("skipUnlock","true");
         caps.setCapability("appPackage", "com.netzme.netzmeandroid.staging");
-        caps.setCapability("appActivity","id.netzme.netzmeandroid.view.loadingscreen.LoadingScreenActivity");caps.setCapability("noReset","false");
-        driver = new AndroidDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"),caps);
+        caps.setCapability("appActivity", "id.netzme.netzmeandroid.view.loadingscreen.LoadingScreenActivity");
+        caps.setCapability("noReset", "false");
+        driver = new AndroidDriver<MobileElement>(new URL("http://127.0.0.1:4723/wd/hub"), caps);
         //  WebDriverWait wait = new WebDriverWait(driver, 100);
         //  wait.until(ExpectedConditions.visibilityOfElementLocated((By.id("id"))));
         //  driver.findElement(By.id("id")).sendKeys("btn_register");
@@ -39,12 +38,12 @@ public class SmokeTesting {
 
     }
 
-  //  public void callNextBtn(){
+    //  public void callNextBtn(){
 
     //    nextBtn.click();
     //}
     @Test
-    public void registrationTest () throws InterruptedException {
+    public void registrationTest() throws InterruptedException {
 
         WebElement nextBtn = (new WebDriverWait(driver, 80)).until(ExpectedConditions.presenceOfElementLocated(By.id(("text_introduction_next"))));
 
@@ -75,9 +74,9 @@ public class SmokeTesting {
 
         WebElement regist_confirm_btn = driver.findElementById("button_confirmation_registration");
         regist_confirm_btn.click();
+    }
 
-
-        //Wait waitForElement = new FluentWait(appiumDriver).withTimeout(50, TimeUnit.SECONDS).pollingEvery(1, TimeUnit.SECONDS).ignoring(NoSuchElementException.class);
+    //Wait waitForElement = new FluentWait(appiumDriver).withTimeout(50, TimeUnit.SECONDS).pollingEvery(1, TimeUnit.SECONDS).ignoring(NoSuchElementException.class);
 
 
     /*    WebElement promo_dialog = (new WebDriverWait(driver, 50)).until(ExpectedConditions.presenceOfElementLocated(By.id(("promotion_dialog_container"))));
@@ -94,12 +93,15 @@ public class SmokeTesting {
             chat_container.click();
 
         }*/
-       if(!driver.findElements(By.id("promotion_dialog_container")).isEmpty()) {
-         WebElement promo_dialog_cbox = driver.findElementById("promotion_dialog_close_button");
-         promo_dialog_cbox.click();
-       }
+    @Test
+    public void closeDialog() {
 
-        if (!driver.findElements(By.id("pampay_view_request_money_onboarding_block")).isEmpty()){
+        if (!driver.findElements(By.id("promotion_dialog_container")).isEmpty()) {
+            WebElement promo_dialog_cbox = driver.findElementById("promotion_dialog_close_button");
+            promo_dialog_cbox.click();
+        }
+
+        if (!driver.findElements(By.id("pampay_view_request_money_onboarding_block")).isEmpty()) {
             WebElement pin_box = driver.findElementById("button_set_pin_dialog");
             pin_box.click();
 
@@ -112,19 +114,19 @@ public class SmokeTesting {
             WebElement save_pin_btn = driver.findElementById("button_save_pin");
             save_pin_btn.click();
 
-            if (!driver.findElements(By.id("pampay_view_request_money_onboarding_block")).isEmpty()){
+            if (!driver.findElements(By.id("pampay_view_request_money_onboarding_block")).isEmpty()) {
                 WebElement set_ok_pin_btn = driver.findElementById("pin_success_dialog_ok_button");
                 set_ok_pin_btn.click();
             }
 
         }
 
-      //  if (!driver.findElements(By.id("show_pin_layout")).isEmpty()){
+        //  if (!driver.findElements(By.id("show_pin_layout")).isEmpty()){
         //    WebElement input_pin_btn = driver.findElementById("input_show_pin");
-          //  input_pin_btn.sendKeys("000000");
+        //  input_pin_btn.sendKeys("000000");
         //}
 
-       // WebElement buffer_contact = (new WebDriverWait(driver, 80)).until(ExpectedConditions.presenceOfElementLocated(By.id(("contact_list_item_container"))));
+        // WebElement buffer_contact = (new WebDriverWait(driver, 80)).until(ExpectedConditions.presenceOfElementLocated(By.id(("contact_list_item_container"))));
         //ada masalah disini no element found
         //tes chatting
 
@@ -135,6 +137,10 @@ public class SmokeTesting {
         WebElement input_pin_btn = (new WebDriverWait(driver, 30).until(ExpectedConditions.presenceOfElementLocated(By.id("input_show_pin"))));
         //input_pin_btn.sendKeys("000000");
         driver.getKeyboard().sendKeys("000000");
+    }
+
+    @Test
+    public void chattingUser() {
 
         WebElement chat_container = driver.findElementById("contact_list_item_container");
         chat_container.click();
@@ -144,18 +150,54 @@ public class SmokeTesting {
 
         WebElement send_chat_btn = driver.findElementById("button_chat_send");
         send_chat_btn.click();
+    }
 
+    @Test
+    public void sendMedia() {
         //tes kirim video
         WebElement send_media_btn = driver.findElementById("button_chat_send_media");
         send_media_btn.click();
 
-        WebElement take_video_btn = driver.findElementById("camera_video_record_button");
+       /* WebElement take_video_btn = driver.findElementById("camera_video_record_button");
         take_video_btn.click();
 
         //driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
         WebElement stop_media_btn = driver.findElementById("camera_video_stop_record_button");
-        stop_media_btn.click();
+        stop_media_btn.click(); */
+
+        WebElement el2 = driver.findElementByAccessibilityId("record video");
+        el2.click();
+        System.out.println("Start Video");
+
+        //el2.click();
+
+        //WebElement popUp = driver.findElementByAccessibilityId("stop record video");
+        //popUp.click();
+        // driver.findElement(By.xpath("//android.widget.ImageView[@index='0']")).click();
+        WebElement stopBtn = (new WebDriverWait(driver, 80)).until(ExpectedConditions.presenceOfElementLocated(By.xpath(("//android.widget.ImageButton[@content-desc='stop record video']"))));
+        stopBtn.click();
+
+        System.out.println("Button stop found");
+        //catch(NoSuchElementException e) {
+        // System.out.println("Impossible to click the stop. Reason: " + e.toString());
+        //}
+
+       /* if (!driver.findElements(By.id("camera_video_record_button_switcher")).isEmpty()){
+            System.out.println("Button switcher found");
+
+            driver.findElement(By.id("camera_video_record_button_switcher")).click();
+        } */
+        //WebDriverWait wait = new WebDriverWait(driver, 80);
+        //wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("camera_photo_video_capture_button_switcher")));
+        //WebElement el3 = driver.findElementByAccessibilityId("hentikan rekam video");
+
+        //WebElement el3 = (new WebDriverWait(driver, 80).until(ExpectedConditions.presenceOfElementLocated(By.id("com.netzme.netzmeandroid.staging:id/camera_video_record_button"))));
+        //driver.findElementByXPath("//android.widget.ImageButton[@index='0']").click();
+
+
+        WebElement el4 = driver.findElementById("text_posting_photo");
+        el4.click();
 
         //id untuk ET content description : edit_content_description
 
@@ -173,14 +215,17 @@ public class SmokeTesting {
         take_photo_btn.click();
         send_photo_btn.click();
         sent_media_txt.click();
+    }
 
+    @Test
+    public void sendSticker() {
         //kirim sticker
         WebElement sticker_btn = driver.findElementById("button_chat_sticker");
         sticker_btn.click();
         WebElement download_sticker_btn = driver.findElementById("sticker_download_button");
         download_sticker_btn.click();
 
-        if (!driver.findElements(By.id("grid_sticker_thumbnails")).isEmpty()){
+        if (!driver.findElements(By.id("grid_sticker_thumbnails")).isEmpty()) {
             driver.findElement(By.xpath("//android.widget.ImageView[@index='0']")).click();
 
             WebElement send_picked_btn = driver.findElementById("send_sticker_button");
@@ -189,25 +234,12 @@ public class SmokeTesting {
 
         WebElement quit_chat_btn = driver.findElementById("button_chat_back");
         quit_chat_btn.click();
-
-
-
-
-
-
-        
     }
-
-  //  @Test
-  //  public void chatting() throws InterruptedException {
-
-
-
-    //}
 
     @AfterMethod
     public void teardown(){
         driver.quit();
     }
+}
 
-    }
+
